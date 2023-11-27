@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisata_candi/screens/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -16,6 +17,45 @@ class _SignInScreenState extends State<SignInScreen> {
   String _errorText = '';
   bool _isSignedIn = false;
   bool _obscurePassword = true;
+
+  void signIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String savedUsername = prefs.getString('username') ?? '';
+    String savedPassword = prefs.getString('password') ?? '';
+    String enteredUsername = _usernameController.text.trim();
+    String enteredPassword = _passwordController.text.trim();
+
+    if(enteredUsername.isEmpty || enteredPassword.isEmpty) {
+      setState(() {
+        _errorText = 'Nama Pengguna dan kata sandi harus diisi';
+      });
+      return;
+    }
+
+    if(savedUsername.isEmpty || savedPassword.isEmpty) {
+      setState(() {
+        _errorText = 'Pengguna belum terdaftar, Silakan daftar terlebih dahulu';
+      });
+      return;
+    }
+
+    if(enteredUsername == savedUsername && enteredPassword == savedPassword){
+      setState(() {
+        _errorText = '';
+        _isSignedIn = true;
+        prefs.setBool('isSigneId', true);
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      });
+    }else {
+      setState(() {
+      _errorText = 'Nama pengguna atau kata sandi salah';
+    });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +146,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => SignUpScreen())
-                                );
+                                // Navigator.push(context,
+                                //     MaterialPageRoute(builder: (context) => SignUpScreen()));
+                                Navigator.pushNamed(context, '/sign_in');
                               },
                           )
                         ]

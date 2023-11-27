@@ -20,13 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // initialRoute: '/',
-      // routes: {
-      //   '/' : (context) => MainScreen(),
-      //   // '/detail' : (context) => DetailScreen(candi: candi),
-      //   '/sign_in' : (context) => SignInScreen(),
-      //   '/sign_up' : (context) => SignUpScreen(),
-      // },
+      initialRoute: '/',
+      routes: {
+        //  '/' : (context) => MainScreen(),
+        //  '/detail' : (context) => DetailScreen(candi: candi),
+        '/sign_in' : (context) => SignInScreen(),
+        '/sign_up' : (context) => SignUpScreen(),
+      },
       debugShowCheckedModeBanner: false,
       title: 'Wisata Candi',
       theme: ThemeData(
